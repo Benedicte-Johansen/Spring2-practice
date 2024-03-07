@@ -1,12 +1,22 @@
 package com.example.spring2practice;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class KundeController {
-    @PostMapping("/")
-    public Kunde returKunde(Kunde innKunde){
-        return innKunde;
+
+    private final List<Kunde> alleKunder = new ArrayList<>();
+    @PostMapping("/lagre")
+    public void lagreKunde(Kunde innKunde){
+        alleKunder.add(innKunde);
+    }
+    @GetMapping("/hentAlle")
+    public List<Kunde> hentAlle(){
+        return alleKunder;
     }
 }

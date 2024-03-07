@@ -9,20 +9,36 @@
 <h1>Kunde</h1>
 Skriv inn navnet: <input type="text" id="navn"><br>
 Skriv inn adressen: <input type="text" id="adresse"><br>
-<button onclick="hentData()">Trykk her</button><br>
-Fornavn: <span id="utNavn"></span><br>
-Etternavn: <span id="utAdresse"></span>
+<button onclick="regKunde()">Registrer</button><br>
+Alle kundene:
+<div id="kundene"></div>
 
 <script type="application/javascript">
-    function hentData(){
+    function regKunde(){
         const kunde = {
             navn : $("#navn").val(),
             adresse : $("#adresse").val()
         };
-        $.post("/", kunde, function (data){
-            $("#utNavn").html(data.navn);
-            $("#utAdresse").html(data.adresse);
+        $.post("/lagre", kunde, function (data){
+            hentAlle();
         });
+        $("#navn").val("");
+        $("#adresse").val("");
+    }
+
+    function hentAlle(){
+        $.get("/hentALle", function (data){
+            formaterData(data);
+        });
+    }
+
+    function formaterData(kunder){
+        let ut = "<table><tr><th>Navn</th><th>Adresse</th></tr>";
+        for (const kunde of kunder){
+            ut += "<tr><td>"+kunde.navn+"</td><td>"+kunde.adresse+"</td></tr>";
+        }
+        ut += "</<table>";
+        $("#kundene").html(ut);
     }
 </script>
 </body>
